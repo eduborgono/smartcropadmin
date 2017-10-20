@@ -2,7 +2,8 @@ from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
 from client.gets import search_user
 from client.puts import update_user_nick, update_user_name, update_user_pass, update_profile
-from users.forms import EditUserForm
+from client.posts import new_user_acc
+from users.forms import EditUserForm, NewUserForm
 from django.http import HttpResponseRedirect
 from django.core.signing import Signer, BadSignature
 import os
@@ -62,3 +63,29 @@ class IndexView(TemplateView):
 
         return redirect("users:index")
 
+
+class NewUserView(TemplateView):
+    def get(self, request, *args, **kwargs):
+        if 'nickname' not in request.session:
+            return redirect("home:index")
+        else:
+            form = NewUserForm()
+        return render(request, "users/userform.html", {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        if 'nickname' not in request.session:
+            return redirect("home:index")
+        else:
+            error = ""
+            form = NewUserForm(request.POST)
+            if form.is_valid():
+                status = new_user_acc(form.cleaned_data['mail'],
+                             form.cleaned_data['name'],
+                             form.cleaned_data['password1'],
+                             form.cleaned_data['nickname'])
+                if status == 201:
+                    return redirect("users:index")
+                else:
+                    error = 'Intentalo nuevamente'
+
+        return render(request, "users/userform.html", {'form': form, 'error': error, })

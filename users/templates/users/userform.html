@@ -1,0 +1,39 @@
+{% extends 'users/container.html' %}
+{% load form_style %}
+
+{% block container %}
+
+<form action="{% url 'users:new_user' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p class="text-danger">{{error}}</p>
+    <div class="form-group">
+        {{form.name.errors}}
+        <label for="{{ form.name.id_for_label }}" class="bmd-label-floating">Nombre</label>
+        {{ form.name|add_css:'form-control' }}
+    </div>
+    <div class="form-group">
+        {{form.nickname.errors}}
+        <label for="{{ form.nickname.id_for_label }}" class="bmd-label-floating">Cuenta</label>
+        {{ form.nickname|add_css:'form-control' }}
+    </div>
+    <div class="form-group">
+        {{form.mail.errors}}
+        <label for="{{ form.mail.id_for_label }}" class="bmd-label-floating">Correo electrónico</label>
+        {{ form.mail|add_css:'form-control' }}
+    </div>
+    <div class="form-group">
+        {{form.password1.errors}}
+        <label for="{{ form.password1.id_for_label }}" class="bmd-label-floating">Contraseña</label>
+        {{ form.password1|add_css:'form-control' }}
+    </div>
+    <div class="form-group">
+        {{form.password2.errors}}
+        <label for="{{ form.password2.id_for_label }}" class="bmd-label-floating">Repita contraseña</label>
+        {{ form.password2|add_css:'form-control' }}
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-lg btn-block round">Crear cuenta</button>
+    </div>
+</form>
+
+{% endblock %}

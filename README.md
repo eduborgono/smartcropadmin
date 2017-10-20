@@ -1,1 +1,1 @@
-# smartcropadmin
+Sistema de gesti?n de datos de SmartCrop

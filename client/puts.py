@@ -1,5 +1,4 @@
 import requests
-from os import remove
 
 
 API_URL = 'http://smartcrop.lightup.cl/api/'
