@@ -1,7 +1,8 @@
-{% extends 'users/container.html' %}
+{% extends 'pots/pots_container.html' %}
 {% load form_style %}
 
 {% block container %}
+
     <div id="myModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
@@ -12,25 +13,16 @@
                     <h4 class="modal-title" id="title_modal">Modal Header</h4>
                 </div>
                 <div class="modal-body">
-                    <form action="{% url 'users:index' %}" method="post" enctype="multipart/form-data">
+                    <form action="{% url 'pots:index' %}" method="post">
                         {% csrf_token %}
                         {{form.id}}
-                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
                         <div class="form-group">
                             <label for="{{ form.name.id_for_label }}" class="bmd-label-floating">Nombre</label>
                             {{ form.name|add_css:'form-control' }}
                         </div>
                         <div class="form-group">
-                            <label for="{{ form.nickname.id_for_label }}" class="bmd-label-floating">Cuenta</label>
-                            {{ form.nickname|add_css:'form-control' }}
-                        </div>
-                        <div class="form-group">
-                            <label for="{{ form.avatar.id_for_label }}" class="bmd-label-floating">Avatar</label>
-                            {{ form.avatar|add_css:'form-control' }}
-                        </div>
-                        <div class="form-group">
-                            <label for="{{ form.password.id_for_label }}" class="bmd-label-floating">Contraseña nueva</label>
-                            {{ form.password|add_css:'form-control' }}
+                            <label for="{{ form.owner.id_for_label }}" class="bmd-label-floating">Dueño</label>
+                            {{ form.owner|add_css:'form-control' }}
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary btn-lg btn-block round">Actualizar</button>
@@ -41,48 +33,50 @@
 
         </div>
     </div>
+
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nombre</th>
-                    <th>Cuenta</th>
-                    <th>Avatar</th>
+                    <th>Dueño</th>
+                    <th>Solicitudes</th>
+                    <th>Observadores</th>
                 </tr>
             </thead>
             <tbody>
-            {% for user in users %}
+            {% for pot in pots %}
             <tr>
                 <td>
                     <button data-toggle="tooltip" title="Copiar ID al portapapeles" class="btn btn-default nope"
-                            id="button{{ forloop.counter0 }}" value="{{user.ID}}">
+                            id="button{{ forloop.counter0 }}" value="{{pot.id}}">
                         <span class="glyphicon glyphicon-copy"></span>
                     </button>
                 </td>
-                <td class="column{{ forloop.counter0 }}" data-toggle="modal" data-target="#myModal">{{ user.name }}</td>
-                <td class="column{{ forloop.counter0 }}" data-toggle="modal" data-target="#myModal">{{ user.nickname }}</td>
-                <td class="column{{ forloop.counter0 }}" data-toggle="modal" data-target="#myModal">{{ user.avatar }}</td>
+                <td class="column{{ forloop.counter0 }}" data-toggle="modal" data-target="#myModal">{{ pot.name }}</td>
+                <td class="column{{ forloop.counter0 }}" data-toggle="modal" data-target="#myModal">{{ pot.owner }}</td>
+                <td class="column{{ forloop.counter0 }}" data-toggle="modal" data-target="#myModal">{{ pot.requests }}</td>
+                <td class="column{{ forloop.counter0 }}" data-toggle="modal" data-target="#myModal">{{ pot.watchers }}</td>
             </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
-{% endblock %}
 
+{% endblock %}
 {% block jcode%}
 
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();
     });
 
-    {% for user in users %}
+    {% for pot in pots %}
         $(".column{{ forloop.counter0 }}").click(function() {
-            $('#title_modal').html("{{ user|dict_get:'mail' }}");
-            $('#{{ form.id.id_for_label }}').val("{{ user|dict_get:'id' }}");
-            $('#{{ form.name.id_for_label }}').val("{{ user|dict_get:'name' }}");
-            $('#{{ form.nickname.id_for_label }}').val("{{ user|dict_get:'nickname' }}");
-            $('#{{ form.avatar.id_for_label }}').val("{{ user|dict_get:'avatar' }}");
+            $('#title_modal').html("{{ pot|dict_get:'name' }}");
+            $('#{{ form.id.id_for_label }}').val("{{ pot|dict_get:'id' }}");
+            $('#{{ form.name.id_for_label }}').val("{{ pot|dict_get:'name' }}");
+            $('#{{ form.owner.id_for_label }}').val("{{ pot|dict_get:'owner' }}");
         });
 
         $("#button{{ forloop.counter0 }}").click(function() {
@@ -95,5 +89,6 @@
             document.body.removeChild(aux);
         });
     {% endfor %}
+
 
 {% endblock %}
