@@ -20,6 +20,7 @@ from smartcropadmin.settings import ADMIN_ENABLED
 urlpatterns = [
     url(r'^page/', include('home.urls')),
     url(r'^page/users/', include('users.urls')),
+    url(r'^page/pots/', include('pots.urls')),
 ]
 
 if ADMIN_ENABLED:
