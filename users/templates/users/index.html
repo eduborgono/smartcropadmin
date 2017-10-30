@@ -46,6 +46,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Correo</th>
                     <th>Nombre</th>
                     <th>Cuenta</th>
                     <th>Avatar</th>
@@ -60,6 +61,7 @@
                         <span class="glyphicon glyphicon-copy"></span>
                     </button>
                 </td>
+                <td class="column{{ forloop.counter0 }}" data-toggle="modal" data-target="#myModal">{{ user.mail }}</td>
                 <td class="column{{ forloop.counter0 }}" data-toggle="modal" data-target="#myModal">{{ user.name }}</td>
                 <td class="column{{ forloop.counter0 }}" data-toggle="modal" data-target="#myModal">{{ user.nickname }}</td>
                 <td class="column{{ forloop.counter0 }}" data-toggle="modal" data-target="#myModal">{{ user.avatar }}</td>
