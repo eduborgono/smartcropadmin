@@ -20,3 +20,9 @@ def new_plant():
     payload = {}
     r = requests.post(API_URL + "plants", data=payload)
     return r.status_code
+
+
+def new_plant_tip(plant_id, new_type, new_description):
+    payload = {'type': new_type, 'description': new_description}
+    r = requests.post(API_URL + "plants/" + plant_id + "/tips", data=payload)
+    return r.status_code

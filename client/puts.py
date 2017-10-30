@@ -64,3 +64,7 @@ def update_plant_description(plant_id, new_description):
     return r.status_code
 
 
+def update_plant_category(plant_id, category_id, new_type, new_description):
+    payload = {'type': new_type, 'description': new_description}
+    r = requests.put(API_URL + "plants/" + plant_id + "/tips/" + category_id, data=payload)
+    return r.status_code
