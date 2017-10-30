@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 from auth.auth import log_required
-from client.posts import new_plant
+from client.posts import new_plant, new_plant_tip
 from client.gets import get_all_plants
-from client.puts import update_plant, update_plant_description
+from client.deletes import delete_plant_tip
+from client.puts import update_plant, update_plant_description, update_plant_category
 from plants.forms import EditPlantForm, InfoPlantForm
 
 
@@ -62,7 +64,11 @@ class PlantInfoView(TemplateView):
         plant_id = request.GET.get("id")
         if plant_id is not None:
             form = InfoPlantForm(plant_id=plant_id)
-            return render(request, self.template_name, {'form': form, })
+            excluding_head_form = ['plant', 'description']
+            excluding_foot_form = ['new_tip_type', 'new_tip_description']
+            return render(request, self.template_name, {'form': form,
+                                                        'excluding_foot_form': excluding_foot_form,
+                                                        'excluding_head_form': excluding_head_form, })
         return redirect('plants:index')
 
     @log_required
@@ -73,15 +79,30 @@ class PlantInfoView(TemplateView):
             description = form.cleaned_data['description']
             update_plant_description(plant_id, description)
 
-            # TODO add tips
-
             new_tip_type = form.cleaned_data['new_tip_type']
             new_tip_description = form.cleaned_data['new_tip_description']
-            all_keys = list(form.cleaned_data.keys())
-            all_keys.remove('plant').remove('id').remove('description').remove('new_tip_type').remove(
-                'new_tip_description')
+            if len(new_tip_type) > 0:
+                new_plant_tip(plant_id, new_tip_type, new_tip_description)
 
+            all_entries = form.cleaned_data.copy()
+            del all_entries['plant']
+            del all_entries['id']
+            del all_entries['description']
+            del all_entries['new_tip_type']
+            del all_entries['new_tip_description']
 
+            for key in all_entries:
+                key_split = key.split(':')
+                if key_split[1] == 'type':
+                    if len(all_entries[key]) > 0:
+                        update_plant_category(plant_id,
+                                              key_split[0],
+                                              all_entries[key_split[0]+':type'],
+                                              all_entries[key_split[0]+':description'])
+                    else:
+                        delete_plant_tip(plant_id, key_split[0])
 
+            next_page = request.POST.get('next', '/')
+            return HttpResponseRedirect(next_page)
 
         return render(request, self.template_name, {'form': form, })

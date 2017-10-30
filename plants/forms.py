@@ -28,19 +28,41 @@ class InfoPlantForm(forms.Form):
         if self.plant_id is not None:
             status, plant = get_plant(self.plant_id)
             if status == 200:
-                self.fields['plant'] = forms.CharField(label='Planta', disabled=True, initial=plant['name'])
-                self.fields['id'] = forms.CharField(widget=forms.HiddenInput(), initial=plant['_id'])
+                self.fields['plant'] = forms.CharField(label='Planta',
+                                                       disabled=True,
+                                                       initial=plant['name'])
+                self.fields['description'] = forms.CharField(label="Descripción",
+                                                             widget=forms.Textarea(),
+                                                             required=False,
+                                                             initial=plant['description'])
+                self.fields['id'] = forms.CharField(widget=forms.HiddenInput(),
+                                                    initial=plant['_id'])
                 for tip in plant['tips']:
-                    self.fields[tip['type']] = forms.CharField(widget=forms.Textarea(), initial=tip['description'])
+                    self.fields[tip['_id']+':type'] = forms.CharField(label='',
+                                                                      initial=tip['type'],
+                                                                      required=False)
+                    self.fields[tip['_id']+':description'] = forms.CharField(label='',
+                                                                             widget=forms.Textarea(),
+                                                                             initial=tip['description'],
+                                                                             required=False)
+
+                self.fields['new_tip_type'] = forms.CharField(label='Titulo nuevo consejo',
+                                                              required=False)
+                self.fields['new_tip_description'] = forms.CharField(widget=forms.Textarea(),
+                                                                     label='Descripción nuevo consejo',
+                                                                     required=False)
 
     plant = forms.CharField()
-    description = forms.CharField(label="Descripción", widget=forms.Textarea(), required=False)
-    new_tip_type = forms.CharField(label='Titulo nuevo consejo', required=False)
-    new_tip_description = forms.CharField(widget=forms.Textarea(), label='Descripción nuevo consejo', required=False)
+    description = forms.CharField()
 
     def clean(self):
         cleaned_data = super(InfoPlantForm, self).clean()
+        _new_type_type = cleaned_data.get("new_tip_type")
+        _new_tip_description = cleaned_data.get("new_tip_description")
         key_list = list(cleaned_data.keys())
         new_type = cleaned_data.get("new_tip_type")
         if new_type in key_list:
-            self.add_error('new_tip_type', "No puedes usar "+new_type+" como nuevo nombre de categoría")
+            self.add_error('new_tip_type', "No puedes usar "+new_type+" como nuevo un nombre para un consejo.")
+
+        if (len(_new_type_type) > 0) != (len(_new_tip_description) > 0):
+            self.add_error('new_tip_type', "Para añadir un nuevo consejo se debe llenar el título y la descripción.")

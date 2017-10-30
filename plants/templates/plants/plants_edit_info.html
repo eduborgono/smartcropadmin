@@ -5,16 +5,50 @@
 
 <form action="{% url 'plants:editplant' %}" method="post">
     {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.get_full_path }}">
     {{ form.id }}
-    {% for field in form.visible_fields %}
-    <div class="form-group">
-        <label for="{{ field.name }}" class="bmd-label-floating">{{ field.label }}</label>
-        {% for error in field.errors %}
-        <p class="text-danger">{{ error }}</p>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+        {% for field in form.visible_fields %}
+            {% if field.name in excluding_head_form %}
+                {% for error in field.errors %}
+                <p class="text-danger">{{ error }}</p>
+                {% endfor %}
+                <div class="form-group">
+                {{ field|add_css:'form-control' }}
+                </div>
+            {% endif %}
         {% endfor %}
-        {{ field|add_css:'form-control' }}
+        </div>
+        <div class="panel-body">
+        {% for field in form.visible_fields %}
+            {% if field.name not in excluding_head_form and field.name not in excluding_foot_form %}
+                {% if forloop.counter0|divisibleby:2 %}
+                <div class="well well-sm">
+                    <div class="form-group">
+                        {{ field|add_css:'form-control' }}
+                    </div>
+                {% else %}
+                    <div class="form-group">
+                        {{ field|add_css:'form-control' }}
+                    </div>
+                </div>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        </div>
+        <div class="panel-footer">
+        {% for field in form.visible_fields %}
+            {% if field.name in excluding_foot_form %}
+                <label for="{{ field.name }}" class="bmd-label-floating">{{ field.label }}</label>
+                {% for error in field.errors %}
+                <p class="text-danger">{{ error }}</p>
+                {% endfor %}
+                {{ field|add_css:'form-control' }}
+            {% endif %}
+        {% endfor %}
+        </div>
     </div>
-    {% endfor %}
     <div class="form-group">
         <button type="submit" class="btn btn-primary btn-lg btn-block round">Actualizar</button>
     </div>
