@@ -40,3 +40,18 @@ def get_pot(pot_id):
         return r.status_code, None
     return 404, None
 
+
+def get_all_plants():
+    r = requests.get(API_URL + 'plants')
+    if r.status_code == 200:
+        return 200, r.json()
+    return r.status_code, []
+
+
+def get_plant(plant_id):
+    if len(plant_id) > 0:
+        r = requests.get(API_URL + 'plants/' + plant_id)
+        if r.status_code == 200:
+            return 200, r.json()
+        return r.status_code, None
+    return 404, None

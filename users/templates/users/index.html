@@ -28,10 +28,12 @@
                             <label for="{{ form.avatar.id_for_label }}" class="bmd-label-floating">Avatar</label>
                             {{ form.avatar|add_css:'form-control' }}
                         </div>
+                        {% comment %}
                         <div class="form-group">
                             <label for="{{ form.password.id_for_label }}" class="bmd-label-floating">Contraseña nueva</label>
                             {{ form.password|add_css:'form-control' }}
                         </div>
+                        {% endcomment %}
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary btn-lg btn-block round">Actualizar</button>
                         </div>
