@@ -14,3 +14,9 @@ def new_pot():
     payload = {}
     r = requests.post(API_URL + "pots", data=payload)
     return r.status_code
+
+
+def new_plant():
+    payload = {}
+    r = requests.post(API_URL + "plants", data=payload)
+    return r.status_code
