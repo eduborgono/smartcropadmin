@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['127.0.0.1', '192.168.1.2', '192.168.1.3']
 # Application definition
 
 INSTALLED_APPS = [
+    'posts.apps.PostsConfig',
     'plants.apps.PlantsConfig',
     'pots.apps.PotsConfig',
     'home.apps.HomeConfig',

@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^page/users/', include('users.urls')),
     url(r'^page/pots/', include('pots.urls')),
     url(r'^page/plants/', include('plants.urls')),
+    url(r'^page/posts/', include('posts.urls')),
 ]
 
 if ADMIN_ENABLED:
