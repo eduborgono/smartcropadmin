@@ -86,7 +86,6 @@
             $('#{{ form.id.id_for_label }}').val("{{ user|dict_get:'id' }}");
             $('#{{ form.name.id_for_label }}').val("{{ user|dict_get:'name' }}");
             $('#{{ form.nickname.id_for_label }}').val("{{ user|dict_get:'nickname' }}");
-            $('#{{ form.avatar.id_for_label }}').val("{{ user|dict_get:'avatar' }}");
         });
 
         $("#button{{ forloop.counter0 }}").click(function() {

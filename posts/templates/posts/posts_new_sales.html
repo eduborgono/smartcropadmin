@@ -1,0 +1,24 @@
+{% extends 'posts/posts_container.html' %}
+{% load form_style %}
+
+{% block container %}
+<form action="{% url 'posts:new_sales' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+        <label for="{{ field.name }}" class="bmd-label-floating">{{ field.label }}</label>
+        {% for error in field.errors %}
+        <p class="text-danger">{{ error }}</p>
+        {% endfor %}
+        {{ field|add_css:'form-control' }}
+    </div>
+    {% endfor %}
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-lg btn-block round">Nueva venta</button>
+    </div>
+</form>
+{% endblock %}
+
+{% block jcode%}
+
+{% endblock %}

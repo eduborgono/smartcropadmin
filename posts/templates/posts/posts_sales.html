@@ -1,0 +1,109 @@
+{% extends 'posts/posts_container.html' %}
+{% load form_style %}
+
+{% block container %}
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="title_modal">Modal Header</h4>
+                </div>
+                <div class="modal-body">
+                    <img id="image" src="" width="300px" height="300px">
+                    <form action="{% url 'posts:sales' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{form.id}}
+                        {% for field in form.visible_fields %}
+                        <div class="form-group">
+                            <label for="{{ field.name }}" class="bmd-label-floating">{{ field.label }}</label>
+                            {% for error in field.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                            {% endfor %}
+                            {{ field|add_css:'form-control' }}
+                        </div>
+                        {% endfor %}
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block round">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <a href="{% url 'posts:new_sales' %}">
+        <button class="btn btn-default">Nueva venta</button>
+    </a>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID autor</th>
+                    <th>Cuenta autor</th>
+                    <th>Precio</th>
+                    <th>Imagen</th>
+                    <th>Cuerpo</th>
+                    <th>Etiquetas</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sale in sales %}
+                <tr>
+                    <td>
+                        <button data-toggle="tooltip" title="Copiar ID al portapapeles" class="btn btn-default nope"
+                            id="button{{ forloop.counter0 }}" value="{{sale.author}}">
+                            <span class="glyphicon glyphicon-copy"></span>
+                        </button>
+                    </td>
+                    <td class="column{{ forloop.counter0 }}" data-toggle="modal" data-target="#myModal">{{ sale.nick }}</td>
+                    <td class="column{{ forloop.counter0 }}" data-toggle="modal" data-target="#myModal">{{ sale.price }}</td>
+                    <td class="column{{ forloop.counter0 }}" data-toggle="modal" data-target="#myModal">{{ sale.imagen }}</td>
+                    <td class="column{{ forloop.counter0 }}" data-toggle="modal" data-target="#myModal">{{ sale.cuerpo }}</td>
+                    <td class="column{{ forloop.counter0 }}" data-toggle="modal" data-target="#myModal">{{ sale.tags }}</td>
+                    <td>
+                        <form action="{% url 'posts:remove_sale' %}" method="post">
+                            {% csrf_token %}
+                            <button data-toggle="tooltip" title="Eliminar venta" class="btn btn-default nope"
+                                type="submit" name="post_id" value="{{ sale.sale }}">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block jcode%}
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    {% for sale in sales %}
+        $(".column{{ forloop.counter0 }}").click(function() {
+            $('#title_modal').html("{{ sale|dict_get:'nick' }}");
+            $('#image').attr("src", "http://smartcrop.lightup.cl/uploads/{{ sale|dict_get:'imagen' }}");
+            $('#{{ form.id.id_for_label }}').val("{{ sale|dict_get:'sale' }}");
+            $('#{{ form.price.id_for_label }}').val("{{ sale|dict_get:'price' }}");
+            $('#{{ form.text.id_for_label }}').val("{{ sale|dict_get:'cuerpo' }}");
+            $('#{{ form.tags.id_for_label }}').val("{{ sale|dict_get:'tags' }}");
+        });
+
+        $("#button{{ forloop.counter0 }}").click(function() {
+            var aux = document.createElement("input");
+            aux.setAttribute("value", $("#button{{ forloop.counter0 }}").val());
+            document.body.appendChild(aux);
+            aux.select();
+            document.execCommand("copy");
+
+            document.body.removeChild(aux);
+        });
+    {% endfor %}
+{% endblock %}
