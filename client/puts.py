@@ -68,3 +68,34 @@ def update_plant_category(plant_id, category_id, new_type, new_description):
     payload = {'type': new_type, 'description': new_description}
     r = requests.put(API_URL + "plants/" + plant_id + "/tips/" + category_id, data=payload)
     return r.status_code
+
+
+def update_post_image(post_id, file_name):
+    file = {'image': open(file_name, 'rb')}
+    r = requests.put(API_URL+'posts/'+post_id, files=file)
+    return r.status_code
+
+
+def update_post_text(post_id, text):
+    payload = {'text': text}
+    r = requests.put(API_URL + "posts/"+post_id, data=payload)
+    return r.status_code
+
+
+def update_comment(post_id, comment_id, text):
+    payload = {'text': text}
+    r = requests.put(API_URL + "posts/" + post_id + "/comments/" + comment_id, data=payload)
+    return r.status_code
+
+
+def update_sale_image(sale_id, price, file_name, text, tags):
+    payload = {'price': price, 'text': text, 'tags': tags.replace(" ", "")}
+    file = {'image': open(file_name, 'rb')}
+    r = requests.put(API_URL + "posts/"+sale_id, data=payload, files=file)
+    return r.status_code
+
+
+def update_sale(sale_id, price, text, tags):
+    payload = {'price': price, 'text': text, 'tags': tags.replace(" ", "")}
+    r = requests.put(API_URL + "posts/"+sale_id, data=payload)
+    return r.status_code

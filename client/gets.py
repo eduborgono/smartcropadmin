@@ -55,3 +55,24 @@ def get_plant(plant_id):
             return 200, r.json()
         return r.status_code, None
     return 404, None
+
+
+def get_social_posts():
+    r = requests.get(API_URL + 'posts/public')
+    if r.status_code == 200:
+        return 200, r.json()
+    return r.status_code, []
+
+
+def get_sales_posts():
+    r = requests.get(API_URL + 'posts/sale')
+    if r.status_code == 200:
+        return 200, r.json()
+    return r.status_code, []
+
+
+def get_social_p(post_id):
+    r = requests.get(API_URL + 'posts/' + post_id)
+    if r.status_code == 200:
+        return 200, r.json()
+    return r.status_code, []

@@ -1,10 +1,10 @@
 {% extends 'container.html' %}
 
 {% block btn_extra %}
-<a href="{% url 'posts:index' %}">
-    <button class="btn btn-default navbar-btn">Publicas</button>
+<a href="{% url 'posts:social' %}">
+    <button class="btn btn-default navbar-btn">Social</button>
 </a>
-<a href="{% url 'posts:index' %}">
+<a href="{% url 'posts:sales' %}">
     <button class="btn btn-default navbar-btn">Ventas</button>
 </a>
 {% endblock %}
