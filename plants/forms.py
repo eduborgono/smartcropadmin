@@ -28,12 +28,15 @@ class InfoPlantForm(forms.Form):
         if self.plant_id is not None:
             status, plant = get_plant(self.plant_id)
             if status == 200:
+                nombre = 'Sin nombre'
                 desc = ''
                 if 'description' in plant:
                     desc = plant['description']
+                if 'name' in plant:
+                    nombre = plant['name']
                 self.fields['plant'] = forms.CharField(label='Planta',
                                                        disabled=True,
-                                                       initial=plant['name'])
+                                                       initial=nombre)
                 self.fields['description'] = forms.CharField(label="Descripción",
                                                              widget=forms.Textarea(),
                                                              required=False,

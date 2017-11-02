@@ -12,7 +12,7 @@
                     <h4 class="modal-title" id="title_modal">Modal Header</h4>
                 </div>
                 <div class="modal-body">
-                    <img id="image" src="" width="300px" height="300px">
+                    <img id="image" src="" class="img-responsive">
                     <form action="{% url 'posts:sales' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{form.id}}

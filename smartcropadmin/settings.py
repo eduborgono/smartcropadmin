@@ -27,7 +27,7 @@ DEBUG = True
 
 ADMIN_ENABLED = False
 
-ALLOWED_HOSTS = ['127.0.0.1', '192.168.1.2', '192.168.1.3']
+ALLOWED_HOSTS = ['*'] #127.0.0.1', '192.168.1.2', '192.168.1.3
 
 # Application definition
 

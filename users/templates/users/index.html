@@ -12,6 +12,7 @@
                     <h4 class="modal-title" id="title_modal">Modal Header</h4>
                 </div>
                 <div class="modal-body">
+					<img id="image-profile-pic" src="" class="img-responsive">
                     <form action="{% url 'users:index' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{form.id}}
@@ -83,6 +84,7 @@
     {% for user in users %}
         $(".column{{ forloop.counter0 }}").click(function() {
             $('#title_modal').html("{{ user|dict_get:'mail' }}");
+			$('#image-profile-pic').attr("src", "http://smartcrop.lightup.cl/uploads/{{ user|dict_get:'avatar' }}");
             $('#{{ form.id.id_for_label }}').val("{{ user|dict_get:'id' }}");
             $('#{{ form.name.id_for_label }}').val("{{ user|dict_get:'name' }}");
             $('#{{ form.nickname.id_for_label }}').val("{{ user|dict_get:'nickname' }}");
